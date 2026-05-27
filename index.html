@@ -2,41 +2,69 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AC Library — Imperial Gold 3D Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>3006 — Imperial Gold 3D Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;600;700;800;900&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ── [THEME & SECURITY] ─────────────────────────── */
-:root{
-  --bg:#050403;
-  --bg2:#0f0c08;
-  --surface:#17130e;
-  --card:#1f1912;
-  --card2:#2b2218;
-  --border:rgba(212,175,55,.25);
-  --border2:rgba(212,175,55,.5);
-  --glow:rgba(212,175,55,.15);
-  --a:#d4af37; /* Gold */
-  --a2:#fcf6ba; /* Light Gold */
-  --a3:#aa771c; /* Dark Gold */
-  --gold:#f59e0b;
-  --em:#10b981;
-  --red:#f43f5e;
-  --text:#fdfbf7;
-  --muted:#a39887;
-  --white:#fff;
-  --r:16px;
-  --r2:12px;
+:root {
+  --bg: #050403;
+  --bg2: #0f0c08;
+  --surface: rgba(23, 19, 14, 0.75);
+  --card: rgba(31, 25, 18, 0.85);
+  --card2: rgba(43, 34, 24, 0.9);
+  --border: rgba(212, 175, 55, 0.25);
+  --border2: rgba(212, 175, 55, 0.5);
+  --glow: rgba(212, 175, 55, 0.15);
+  --a: #d4af37; /* Gold */
+  --a2: #fcf6ba; /* Light Gold */
+  --a3: #aa771c; /* Dark Gold */
+  --gold: #f59e0b;
+  --em: #10b981;
+  --red: #f43f5e;
+  --text: #fdfbf7;
+  --muted: #a39887;
+  --white: #fff;
+  --r: 16px;
+  --r2: 12px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:'IBM Plex Sans Thai',sans-serif;
-  background:radial-gradient(circle at top center, #1a1712 0%, var(--bg) 100%);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-  /* Anti-Select & Anti-Highlight */
+
+/* Light Theme Variables */
+body.light-theme {
+  --bg: #fcfbf8;
+  --bg2: #f4ebd8;
+  --surface: rgba(255, 252, 245, 0.85);
+  --card: rgba(255, 255, 255, 0.9);
+  --card2: rgba(245, 240, 230, 0.9);
+  --border: rgba(212, 175, 55, 0.5);
+  --border2: rgba(212, 175, 55, 0.8);
+  --text: #1a1712;
+  --muted: #6b6355;
+}
+
+/* Solid Buttons Mode */
+body.solid-buttons .glass-btn, body.solid-buttons .sc, body.solid-buttons .modal, body.solid-buttons .qbox {
+  backdrop-filter: none !important;
+  background: var(--card2) !important;
+}
+
+/* Lite Mode (No Animations/Effects) */
+body.lite-mode * {
+  animation: none !important;
+  transition: none !important;
+  backdrop-filter: none !important;
+}
+body.lite-mode #bg-canvas { display: none !important; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'IBM Plex Sans Thai', sans-serif;
+  background: var(--bg);
+  background-image: radial-gradient(circle at top center, rgba(40,30,15,0.4) 0%, var(--bg) 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -44,16 +72,15 @@ body{
 }
 
 /* ── BACKGROUND MESH ─────────────────────────────── */
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:linear-gradient(rgba(212,175,55,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(212,175,55,.03) 1px,transparent 1px);
-  background-size:60px 60px;
+#bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: linear-gradient(rgba(212,175,55,.02) 1px,transparent 1px), linear-gradient(90deg,rgba(212,175,55,.02) 1px,transparent 1px);
+  background-size: 60px 60px;
 }
 
 /* ── 3D GOLD TEXT GRADIENTS ──────────────────────── */
-.login-logo span, .nav-brand span, .hero-title .grad, h1, h2, .modal-title {
+.grad-text, h1, h2, .modal-title {
   background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
   -webkit-background-clip: text;
   background-clip: text;
@@ -61,247 +88,205 @@ body::before{
   text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
 }
 
-/* ── 3D CONTAINERS & CARDS ───────────────────────── */
-.login-box, .sc, .modal, .qbox, .admin-wrap, .vcard, .qitem, .tab.on {
-  background: linear-gradient(145deg, #17130e, #1c1811);
+/* ── 3D CONTAINERS & CARDS (GLASSMORPHISM) ───────── */
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.05);
+  border-radius: var(--r);
 }
 
 /* ── 3D GOLD BUTTONS ─────────────────────────────── */
-.login-btn, .btn-admin, .btn-start, .tab.on {
+.gold-btn {
   background: linear-gradient(145deg, var(--a), var(--a3)) !important;
   color: #000 !important;
+  font-family: 'Kanit', sans-serif;
   font-weight: 800 !important;
   text-shadow: 0 1px 1px rgba(255,255,255,0.3);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.5), inset 2px 2px 5px rgba(255,255,255,0.4), inset -2px -2px 5px rgba(0,0,0,0.2) !important;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.4), inset 2px 2px 5px rgba(255,255,255,0.4), inset -2px -2px 5px rgba(0,0,0,0.2) !important;
   border: 1px solid #ffdf00 !important;
   transition: all 0.2s cubic-bezier(.34,1.56,.64,1) !important;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 12px 20px;
+  text-align: center;
 }
-.login-btn:hover, .btn-admin:hover, .btn-start:hover {
+.gold-btn:hover {
   transform: translateY(-2px);
   box-shadow: 6px 6px 15px rgba(0,0,0,0.6), inset 2px 2px 5px rgba(255,255,255,0.5), inset -2px -2px 5px rgba(0,0,0,0.2) !important;
-  opacity: 1;
 }
-.login-btn:active, .btn-admin:active, .btn-start:active {
+.gold-btn:active {
   transform: translateY(2px);
   box-shadow: 2px 2px 5px rgba(0,0,0,0.8), inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.2) !important;
 }
 
 /* ── INPUT FIELDS (DEEP EMBOSSED) ────────────────── */
-.lf input, .search, .aform input, .aform textarea {
+.input-3d {
+  width: 100%; padding: 12px 16px;
   background: rgba(0,0,0,0.6) !important;
   border: 1px solid var(--border) !important;
   color: var(--white) !important;
+  border-radius: 10px;
+  font-family: 'IBM Plex Sans Thai', sans-serif; font-size: 0.95rem;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.5) !important;
   transition: all .2s !important;
+  outline: none;
 }
-.lf input:focus, .search:focus, .aform input:focus, .aform textarea:focus {
+body.light-theme .input-3d { background: rgba(255,255,255,0.5) !important; color: #000 !important; }
+.input-3d:focus {
   border-color: var(--a) !important;
-  box-shadow: 0 0 0 2px rgba(212,175,55,0.2), inset 0 2px 4px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 0 0 2px rgba(212,175,55,0.3), inset 0 2px 4px rgba(0,0,0,0.5) !important;
 }
 
-/* ── ORIGINAL STYLES (Tweaked for Premium Look) ──── */
-#loginPage{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 70% at 50% 30%,#0d0b08 0%,var(--bg) 100%)}
-.login-wrap{position:relative;width:min(420px,94vw);animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both}
-.login-glow{position:absolute;inset:-2px;border-radius:24px;z-index:-1;background:linear-gradient(135deg,var(--a),var(--a3));opacity:.25;filter:blur(20px)}
-.login-box{border-radius:24px;padding:44px 40px;backdrop-filter:blur(24px)}
-.login-logo{font-family:'Kanit',sans-serif;font-size:2.2rem;font-weight:900;letter-spacing:-1px;text-align:center;margin-bottom:2px}
-.login-sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:28px}
-.login-rule{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 0 28px}
-.lf{margin-bottom:16px}
-.lf label{display:block;font-size:.78rem;font-weight:500;color:var(--muted);margin-bottom:6px;letter-spacing:.8px;text-transform:uppercase}
-.lf input{width:100%;padding:11px 15px;border-radius:10px;font-size:.95rem;font-family:'IBM Plex Sans Thai',sans-serif;outline:none}
-.login-btn{width:100%;padding:13px;margin-top:6px;border-radius:10px;font-family:'Kanit',sans-serif;font-size:1rem;letter-spacing:.3px;cursor:pointer}
-.login-err{color:var(--red);font-size:.83rem;margin-top:10px;text-align:center;display:none}
-.login-hint{text-align:center;color:var(--muted);font-size:.77rem;margin-top:14px}
+/* ── LOGIN PAGE ──────────────────────────────────── */
+#loginPage { position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle at center, #1a1712 0%, #050403 100%); }
+.login-box { width: min(400px, 90vw); padding: 40px; text-align: center; }
+.login-logo { font-size: 3.5rem; font-family: 'Kanit', sans-serif; font-weight: 900; letter-spacing: -2px; margin-bottom: 5px; }
+.login-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 30px; }
+.login-err { color: var(--red); font-size: 0.85rem; margin-top: 15px; display: none; }
 
-#app{display:none;min-height:100vh;position:relative;z-index:1}
-nav{position:sticky;top:0;z-index:100;height:60px;background:rgba(5,4,2,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
-.nav-brand{font-family:'Kanit',sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:-.5px}
-.nav-r{display:flex;align-items:center;gap:12px}
-.chip{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;background:var(--card);border:1px solid var(--border);border-radius:999px;font-size:.84rem}
-.ava{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--a3));display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#000;font-family:'Kanit',sans-serif;flex-shrink:0}
-.badge-admin{background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:999px;font-family:'Kanit',sans-serif;letter-spacing:.3px}
-.btn-logout{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:.83rem;font-family:'IBM Plex Sans Thai',sans-serif;transition:all .2s}
-.btn-logout:hover{border-color:var(--red);color:var(--red);box-shadow:inset 0 0 10px rgba(244,63,94,.1)}
+/* ── FLOATING NAVBAR (IPHONE STYLE) ──────────────── */
+#floating-nav {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  width: 90%; max-width: 500px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; z-index: 1000;
+  border-radius: 30px;
+  background: var(--surface);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: all 0.3s;
+}
+.nav-logo { font-family: 'Kanit', sans-serif; font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; cursor: pointer; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-user { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.ava { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--a), var(--a3)); display: flex; align-items: center; justify-content: center; color: #000; font-family: 'Kanit', sans-serif; font-weight: 800; }
+.burger-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: var(--a); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.2s; }
+.burger-btn:active { transform: scale(0.9); }
 
-main{max-width:1180px;margin:0 auto;padding:36px 20px 80px}
-.hero{text-align:center;padding:64px 20px 52px;position:relative}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,.08);border:1px solid var(--border);border-radius:999px;padding:5px 16px;font-size:.78rem;color:var(--a);letter-spacing:1.5px;text-transform:uppercase;font-weight:500;margin-bottom:20px}
-.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--a);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hero-title{font-family:'Kanit',sans-serif;font-size:clamp(4rem,10vw,7rem);font-weight:900;line-height:.95;letter-spacing:-3px;margin-bottom:16px}
-.hero-desc{color:var(--muted);font-size:.95rem;margin-bottom:32px;max-width:480px;margin-inline:auto;line-height:1.7}
-.hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
-.pill{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:7px 16px;font-size:.82rem;color:var(--muted);transition:border-color .2s}
-.pill strong{color:var(--text)}
+/* ── BURGER MENU OVERLAY ─────────────────────────── */
+#menu-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+#menu-overlay.active { opacity: 1; pointer-events: all; }
+.menu-close { position: absolute; top: 30px; right: 30px; font-size: 2rem; color: var(--a); cursor: pointer; }
+.menu-item { font-family: 'Kanit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--white); margin: 15px 0; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
+.menu-item:hover { color: var(--a); transform: scale(1.1); text-shadow: 0 0 20px var(--glow); }
 
-.sh{display:flex;align-items:center;gap:14px;margin:44px 0 18px}
-.sh h2{font-family:'Kanit',sans-serif;font-size:1.1rem;font-weight:700}
-.sh-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+/* ── APP VIEWS ───────────────────────────────────── */
+#app { display: none; position: relative; z-index: 1; padding-top: 100px; padding-bottom: 80px; }
+.view-section { display: none; max-width: 1180px; margin: 0 auto; padding: 0 20px; animation: fadeUp 0.5s ease; }
+.view-section.active { display: block; }
 
-.subjects{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px}
-.sc{border-radius:var(--r);padding:24px 16px 20px;text-align:center;cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,border-color .3s}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0;background:linear-gradient(90deg,var(--a),var(--a2),var(--a3))}
-.sc::after{content:'';position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at center top,var(--glow),transparent 70%);transition:opacity .3s}
-.sc:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 25px 50px rgba(0,0,0,.9);border-color:var(--a2)}
-.sc:hover::after{opacity:1}
-.sc-icon{font-size:2.4rem;margin-bottom:12px;display:block;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
-.sc-name{font-family:'Kanit',sans-serif;font-size:.95rem;font-weight:700}
-.sc-count{font-size:.73rem;color:var(--a);margin-top:5px}
+/* ── LOBBY VIEW ──────────────────────────────────── */
+#view-lobby { text-align: center; }
+.billboard-container {
+  position: relative; width: 100%; height: 400px; border-radius: 20px; overflow: hidden; margin-bottom: -50px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--border);
+}
+.billboard-slide { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 1s; opacity: 0; }
+.billboard-slide.active { opacity: 1; }
+.billboard-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--bg) 100%); }
 
-.search{width:100%;padding:11px 16px 11px 42px;border-radius:10px;font-size:.9rem;outline:none;margin-bottom:14px}
-.search-wrap{position:relative}
-.search-wrap::before{content:'🔍';position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:.85rem;pointer-events:none;opacity:.6}
+.lobby-logo { position: relative; z-index: 10; font-family: 'Kanit', sans-serif; font-size: clamp(5rem, 12vw, 9rem); font-weight: 900; letter-spacing: -5px; line-height: 1; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); }
+.brief-section { margin-top: 40px; text-align: left; }
+.brief-card { padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--a); }
+.brief-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+.brief-text { font-size: 0.95rem; line-height: 1.6; }
 
-.tbl-wrap{border-radius:var(--r);border:1px solid var(--border);overflow:hidden;background:var(--card)}
-table{width:100%;border-collapse:collapse}
-thead tr{background:var(--surface)}
-th{padding:11px 16px;text-align:left;font-family:'Kanit',sans-serif;font-size:.75rem;color:var(--a);font-weight:600;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
-td{padding:10px 16px;font-size:.87rem;border-top:1px solid var(--border)}
-tr:hover td{background:rgba(212,175,55,.05)}
-.td-no{color:var(--muted);font-size:.82rem}
-.td-id{font-family:'Kanit',sans-serif;font-weight:700;color:var(--a2)}
-.tr-admin td{background:rgba(212,175,55,.08)}
+.progress-section { margin-top: 40px; text-align: left; }
+.prog-container { margin-bottom: 20px; }
+.prog-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--a2); }
+.prog-track { height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--a), var(--a2)); width: 0%; transition: width 1s ease; box-shadow: 0 0 10px var(--a); }
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:28px 14px;overflow-y:auto;backdrop-filter:blur(10px)}
-.overlay.open{display:flex}
-.modal{border-radius:22px;width:min(820px,100%);margin:auto;animation:fadeUp .3s cubic-bezier(.16,1,.3,1)}
-.modal-hd{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:0}
-.modal-title{font-family:'Kanit',sans-serif;font-size:1.3rem;font-weight:800}
-.modal-close{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
-.modal-close:hover{color:var(--white);border-color:var(--a);box-shadow:inset 0 0 10px rgba(212,175,55,.2)}
-.modal-body{padding:22px 28px 30px}
+/* ── COMMUNITY VIEW ──────────────────────────────── */
+.chat-container { height: 60vh; display: flex; flex-direction: column; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+.chat-msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; background: var(--card2); border: 1px solid var(--border); align-self: flex-start; }
+.chat-msg.mine { align-self: flex-end; background: rgba(212,175,55,0.1); border-color: var(--a); }
+.chat-author { font-size: 0.7rem; color: var(--a); font-weight: 700; margin-bottom: 4px; font-family: 'Kanit', sans-serif; }
+.chat-text { font-size: 0.9rem; line-height: 1.5; }
+.chat-time { font-size: 0.65rem; color: var(--muted); margin-top: 5px; text-align: right; }
+.chat-input-area { display: flex; gap: 10px; padding: 15px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--r) var(--r); }
 
-.tabs{display:flex;gap:3px;background:var(--surface);border-radius:10px;padding:3px;margin-bottom:20px;border:1px solid var(--border);box-shadow:inset 0 2px 5px rgba(0,0,0,.5)}
-.tab{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+/* ── SETTINGS VIEW ───────────────────────────────── */
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border); }
+.setting-label { font-size: 0.95rem; font-weight: 600; }
+.toggle-switch { position: relative; width: 50px; height: 26px; background: rgba(0,0,0,0.5); border-radius: 13px; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
+.toggle-switch.on { background: var(--a); }
+.toggle-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: var(--white); border-radius: 50%; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+.toggle-switch.on .toggle-knob { left: 26px; }
 
-.admin-wrap{border-radius:14px;padding:20px;margin-bottom:20px}
-.admin-title{font-family:'Kanit',sans-serif;font-size:.9rem;font-weight:700;color:var(--a2);margin-bottom:14px;display:flex;align-items:center;gap:7px}
-.aform{display:grid;gap:10px}
-.aform input,.aform textarea,.aform select{width:100%;padding:9px 13px;border-radius:9px;font-size:.88rem;outline:none}
-.aform textarea{resize:vertical;min-height:72px}
+/* ── ORIGINAL LIBRARY STYLES (Kept & Merged) ─────── */
+.sh { display:flex; align-items:center; gap:14px; margin:30px 0 18px; }
+.sh h2 { font-family:'Kanit',sans-serif; font-size:1.2rem; font-weight:800; }
+.sh-line { flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
+.subjects { display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:15px; }
+.sc { position:relative; padding:24px 16px 20px; text-align:center; cursor:pointer; overflow:hidden; transition:transform .3s; }
+.sc::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--a),var(--a2),var(--a3)); }
+.sc:hover { transform:translateY(-5px); border-color:var(--a2); box-shadow: 0 20px 40px rgba(0,0,0,0.9); }
+.sc-icon { font-size:2.5rem; margin-bottom:12px; display:block; filter:drop-shadow(0 4px 6px rgba(0,0,0,.8)); }
+.sc-name { font-family:'Kanit',sans-serif; font-size:.95rem; font-weight:700; color:var(--white); }
+.sc-count { font-size:.75rem; color:var(--a); margin-top:5px; }
 
-.vsrc-tabs{display:flex;gap:5px}
-.vsrc{flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Kanit',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
-.vsrc.on{background:rgba(212,175,55,.15);border-color:var(--a);color:var(--a2);box-shadow:inset 0 0 10px rgba(212,175,55,.1)}
+.tbl-wrap { overflow:hidden; margin-top: 15px; }
+table { width:100%; border-collapse:collapse; }
+thead tr { background:rgba(0,0,0,0.4); }
+th { padding:12px; text-align:left; font-family:'Kanit',sans-serif; font-size:.75rem; color:var(--a); font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+td { padding:12px; font-size:.85rem; border-top:1px solid var(--border); }
+tr:hover td { background:rgba(212,175,55,.05); }
+.tr-admin td { background:rgba(212,175,55,.1); }
 
-.dropzone{display:block;border:2px dashed var(--border2);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(0,0,0,.4)}
-.dropzone:hover,.dropzone.drag{border-color:var(--a);background:rgba(212,175,55,.05)}
-.dropzone-icon{font-size:2.2rem;margin-bottom:8px;text-shadow:0 4px 10px rgba(0,0,0,.8)}
-.dropzone-label{font-family:'Kanit',sans-serif;font-size:.9rem}
-.dropzone-sub{font-size:.75rem;color:var(--a3);margin-top:3px}
+/* Overlays & Modals */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:3000; display:none; align-items:flex-start; justify-content:center; padding:28px 14px; overflow-y:auto; backdrop-filter:blur(10px); }
+.overlay.open { display:flex; }
+.modal { width:min(820px,100%); margin:auto; animation:fadeUp .3s ease; }
+.modal-hd { padding:24px 28px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+.modal-close { width:34px; height:34px; border-radius:8px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.modal-body { padding:22px 28px 30px; }
 
-.prog-wrap{display:none;margin-top:6px}
-.prog-bar{height:4px;background:var(--surface);border-radius:2px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.8)}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:2px;width:0;transition:width .3s}
-.prog-txt{font-size:.73rem;color:var(--muted);margin-top:5px;text-align:center}
+.tabs { display:flex; gap:5px; background:rgba(0,0,0,0.4); border-radius:12px; padding:4px; margin-bottom:20px; border:1px solid var(--border); }
+.tab { flex:1; padding:10px; border:none; border-radius:8px; background:transparent; color:var(--muted); font-family:'Kanit',sans-serif; font-size:.88rem; font-weight:600; cursor:pointer; }
+.tab.on { color:var(--000); }
 
-.btn-admin{padding:10px 20px;border-radius:9px;font-size:.88rem;align-self:start}
+.vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:15px; }
+.vcard { overflow:hidden; cursor:pointer; transition:transform .2s; }
+.vcard:hover { transform:translateY(-5px); border-color:var(--a2); }
+.vthumb { width:100%; aspect-ratio:16/9; background:#000; position:relative; overflow:hidden; }
+.vthumb img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+.vcard:hover .vthumb img { transform:scale(1.05); }
+.vplay { position:absolute; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; }
+.vplay-btn { width:48px; height:48px; border-radius:50%; background:rgba(212,175,55,.2); border:1px solid rgba(212,175,55,.5); display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--a2); backdrop-filter:blur(5px); }
+.vinfo { padding:14px; }
+.vtitle { font-family:'Kanit',sans-serif; font-size:.9rem; font-weight:700; margin-bottom:6px; line-height:1.4; }
+.vmeta { font-size:.7rem; color:var(--muted); display:flex; align-items:center; justify-content:space-between; }
+.vbadge { padding:3px 8px; border-radius:999px; font-family:'Kanit',sans-serif; font-weight:700; background:rgba(212,175,55,.15); color:var(--a2); border:1px solid var(--border); }
 
-.btn-add-q{background:transparent;border:1px dashed var(--border2);border-radius:9px;color:var(--a);padding:10px;width:100%;cursor:pointer;font-family:'Kanit',sans-serif;font-size:.85rem;transition:all .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
-.btn-add-q:hover{border-color:var(--a2);color:var(--a2);background:rgba(212,175,55,.05)}
-.qrow{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;display:grid;gap:8px;box-shadow:inset 0 2px 5px rgba(0,0,0,.5)}
-.qrow-hd{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--a);font-family:'Kanit',sans-serif}
-.btn-rm{background:none;border:none;color:var(--red);cursor:pointer;font-size:.85rem;padding:0}
-.opts2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.opt-row{display:flex;align-items:center;gap:6px}
-.opt-row input[type=radio]{accent-color:var(--a);cursor:pointer}
-.aform .opt-input{flex:1;padding:7px 10px}
+/* Utilities */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+#toast { position:fixed; bottom:30px; right:30px; z-index:9999; padding:12px 24px; border-radius:10px; font-family:'Kanit',sans-serif; font-size:.9rem; color:#000; font-weight:700; opacity:0; transform:translateY(10px); transition:all .3s; pointer-events:none; border:1px solid #ffdf00; background:var(--gold-grad); box-shadow:0 10px 30px rgba(0,0,0,.8); }
+#toast.show { opacity:1; transform:translateY(0); }
+.empty { text-align:center; padding:40px; color:var(--muted); font-size:0.9rem; }
 
-.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.vcard{border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
-.vcard:hover{transform:translateY(-5px);border-color:var(--a2);box-shadow:0 12px 32px rgba(0,0,0,.9)}
-.vthumb{width:100%;aspect-ratio:16/9;background:var(--bg2);position:relative;overflow:hidden}
-.vthumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-.vcard:hover .vthumb img{transform:scale(1.05)}
-.vplay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;transition:background .2s}
-.vcard:hover .vplay{background:rgba(0,0,0,.3)}
-.vplay-btn{width:48px;height:48px;border-radius:50%;background:rgba(212,175,55,.2);backdrop-filter:blur(8px);border:1px solid rgba(212,175,55,.5);display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:transform .2s,background .2s;color:var(--a2);box-shadow:0 4px 10px rgba(0,0,0,.5)}
-.vcard:hover .vplay-btn{transform:scale(1.1);background:rgba(212,175,55,.4)}
-.vinfo{padding:12px}
-.vtitle{font-family:'Kanit',sans-serif;font-size:.88rem;font-weight:700;margin-bottom:4px;line-height:1.4}
-.vmeta{font-size:.73rem;color:var(--muted);display:flex;align-items:center;gap:8px}
-.vbadge{font-size:.65rem;padding:2px 7px;border-radius:999px;font-family:'Kanit',sans-serif;font-weight:700}
-.vbadge.yt{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
-.vbadge.file{background:rgba(212,175,55,.15);color:var(--a2);border:1px solid var(--border)}
-.btn-del{background:none;border:none;color:var(--red);cursor:pointer;font-size:.78rem;padding:0;opacity:.7;transition:opacity .2s}
-.btn-del:hover{opacity:1;text-shadow:0 0 5px var(--red)}
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--a); }
 
-.empty{text-align:center;padding:48px 20px;color:var(--muted)}
-.empty-ic{font-size:3rem;margin-bottom:12px;opacity:.5;filter:grayscale(1) brightness(2)}
-
-.qlist{display:flex;flex-direction:column;gap:9px}
-.qitem{border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;transition:border-color .2s;cursor:default}
-.qitem:hover{border-color:var(--a2);box-shadow:0 10px 20px rgba(0,0,0,.6)}
-.qname{font-family:'Kanit',sans-serif;font-size:.92rem;font-weight:700}
-.qmeta{font-size:.75rem;color:var(--a3);margin-top:3px}
-.btn-start{padding:7px 16px;border-radius:8px;font-size:.83rem;flex-shrink:0}
-
-#quizPlay{display:none}
-.qback{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;font-size:.83rem;transition:all .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
-.qback:hover{color:var(--a2);border-color:var(--a)}
-.qprog-bar{height:5px;background:var(--surface);border-radius:3px;overflow:hidden;margin-bottom:18px;box-shadow:inset 0 1px 3px rgba(0,0,0,.8)}
-.qprog-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:3px;transition:width .4s;box-shadow:0 0 10px var(--a)}
-.qbox{border-radius:14px;padding:26px;margin-bottom:14px}
-.qtext{font-family:'Kanit',sans-serif;font-size:1.05rem;color:var(--a2);margin-bottom:20px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,.8)}
-.opts-grid{display:grid;gap:9px}
-.obtn{width:100%;text-align:left;padding:12px 16px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'IBM Plex Sans Thai',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
-.obtn:hover{border-color:var(--a);background:rgba(212,175,55,.05);box-shadow:0 0 10px rgba(212,175,55,.2), inset 0 2px 4px rgba(0,0,0,.5)}
-.obtn.correct{border-color:var(--em);background:rgba(16,185,129,.1);color:var(--em);box-shadow:0 0 15px rgba(16,185,129,.3)}
-.obtn.wrong{border-color:var(--red);background:rgba(244,63,94,.08);color:var(--red);box-shadow:0 0 15px rgba(244,63,94,.3)}
-
-.result-box{text-align:center;padding:36px 20px}
-.score-ring{width:130px;height:130px;border-radius:50%;background:conic-gradient(var(--a) var(--p,0%),var(--surface) 0);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 10px 30px rgba(0,0,0,.8), inset 0 0 20px rgba(0,0,0,.8);border:1px solid var(--border)}
-.score-inner{width:100px;height:100px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 10px 20px rgba(0,0,0,.9), 0 0 15px rgba(212,175,55,.3)}
-.score-num{font-family:'Kanit',sans-serif;font-size:1.5rem;font-weight:900;color:var(--a2);text-shadow:0 2px 5px rgba(0,0,0,.8)}
-.score-lbl{font-size:.68rem;color:var(--muted)}
-.score-msg{font-family:'Kanit',sans-serif;font-size:1.2rem;margin-bottom:6px}
-.score-detail{color:var(--a3);font-size:.88rem;margin-bottom:24px}
-
-#vidOverlay{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(15px)}
-#vidOverlay.open{display:flex}
-.vid-box{width:min(900px,100%);position:relative;animation:fadeUp .25s ease}
-.vid-close{position:absolute;top:-46px;right:0;background:rgba(0,0,0,.5);border:1px solid var(--border);color:var(--a);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,.5)}
-.vid-close:hover{background:var(--a);color:#000;box-shadow:0 0 15px var(--a)}
-.vid-label{position:absolute;top:-46px;left:0;font-family:'Kanit',sans-serif;font-size:.95rem;font-weight:700;max-width:calc(100% - 50px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.yt-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--border);box-shadow:0 20px 50px rgba(0,0,0,.9)}
-.yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-.file-vid{width:100%;border-radius:14px;background:#000;max-height:82vh;display:block;border:1px solid var(--border);box-shadow:0 20px 50px rgba(0,0,0,.9)}
-
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;padding:11px 20px;border-radius:10px;font-family:'Kanit',sans-serif;font-size:.88rem;color:#000;font-weight:700;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.8);border:1px solid #ffdf00}
-#toast.show{opacity:1;transform:translateY(0)}
-#toast.ok{background:linear-gradient(145deg, var(--a), var(--a3))}
-#toast.err{background:linear-gradient(145deg, var(--red), #881b2f);color:#fff;border-color:var(--red)}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-.fade-up{animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both}
-.fade-up:nth-child(1){animation-delay:.05s}
-.fade-up:nth-child(2){animation-delay:.1s}
-.fade-up:nth-child(3){animation-delay:.15s}
-.fade-up:nth-child(4){animation-delay:.2s}
-.fade-up:nth-child(5){animation-delay:.25s}
-.fade-up:nth-child(6){animation-delay:.3s}
-
-#filePreview{display:none;margin-top:10px}
-#filePreview video{width:100%;border-radius:10px;background:#000;max-height:190px;border:1px solid var(--border)}
-.fpname{font-size:.75rem;color:var(--a3);text-align:center;margin-top:5px}
-.btn-clear-file{background:none;border:none;color:var(--red);font-size:.78rem;cursor:pointer;display:block;margin:4px auto 0;text-shadow:0 1px 2px rgba(0,0,0,.8)}
-
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--a)}
-
-@media(max-width:600px){
-  nav{padding:0 16px}
-  main{padding:20px 12px 60px}
-  .login-box{padding:36px 22px}
-  .modal-hd{padding:18px 18px 14px}
-  .modal-body{padding:16px 18px 24px}
-  .opts2{grid-template-columns:1fr}
-  .hero-title{font-size:3.8rem}
+/* Responsive */
+@media(max-width:600px) {
+  #floating-nav { width: 95%; top: 10px; }
+  #app { padding-top: 80px; }
+  .login-box { padding: 30px 20px; }
+  .modal-body { padding: 15px; }
+  .lobby-logo { font-size: 5rem; }
 }
 </style>
 </head>
@@ -311,197 +296,231 @@ tr:hover td{background:rgba(212,175,55,.05)}
 
 <div id="loginPage">
   <div class="login-wrap">
-    <div class="login-glow"></div>
-    <div class="login-box">
-      <div class="login-logo">AC <span>Library</span></div>
-      <div class="login-sub">โรงเรียนอัสสัมชัญ · Imperial Edition</div>
-      <div class="login-rule"></div>
+    <div class="glass-panel login-box">
+      <div class="login-logo grad-text">3006</div>
+      <div class="login-sub">Digital Premium Ecosystem</div>
+      
       <div class="lf">
-        <label>เลขที่บัญชีผู้ใช้</label>
-        <input type="number" id="inNo" placeholder="กรอกเลขที่ (1–35)" min="1" max="35">
+        <label>User ID (เลขที่)</label>
+        <input type="number" id="inNo" class="input-3d" placeholder="กรอกเลขที่ (1–35)" min="1" max="35">
       </div>
       <div class="lf">
-        <label>รหัสผ่านความปลอดภัย</label>
-        <input type="password" id="inPass" placeholder="กรอกรหัสประจำตัว">
+        <label>Passcode (รหัสประจำตัว)</label>
+        <input type="password" id="inPass" class="input-3d" placeholder="กรอกรหัสผ่าน">
       </div>
-      <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบศูนย์กลาง →</button>
-      <div class="login-err" id="loginErr">❌ เลขที่หรือรหัสไม่ถูกต้อง</div>
-      <div class="login-hint">Username = เลขที่ · Password = รหัสประจำตัว</div>
+      
+      <button class="gold-btn" style="width:100%; margin-top:10px;" onclick="doLogin()">Access System</button>
+      <div class="login-err" id="loginErr">❌ Information Incorrect</div>
     </div>
   </div>
 </div>
 
 <div id="app">
-  <nav>
-    <div class="nav-brand">AC <span>Library</span></div>
-    <div class="nav-r">
-      <div class="chip">
-        <div class="ava" id="navAva">?</div>
-        <span id="navName" style="color:var(--white); font-weight:500;">-</span>
-        <span class="badge-admin" id="navAdmin" style="display:none">ADMIN</span>
-      </div>
-      <button class="btn-logout" onclick="logout()">ออกจากระบบ</button>
+  
+  <nav id="floating-nav">
+    <div class="nav-logo grad-text" onclick="switchView('lobby')">3006</div>
+    <div class="nav-right">
+      <div class="nav-user"><div class="ava" id="navAva">?</div></div>
+      <div class="burger-btn" onclick="toggleMenu()">☰</div>
     </div>
   </nav>
 
-  <main>
-    <div class="hero fade-up">
-      <div class="hero-tag">ปีการศึกษา 2569 · Digital &amp; Technology Program</div>
-      <div class="hero-title"><span class="grad">ม.3/6</span></div>
-      <div class="hero-desc">ห้องสมุดดิจิทัลอัจฉริยะ — วิดีโอสอน แบบทดสอบ และข้อมูลชั้นเรียนส่วนบุคคล</div>
-      <div class="hero-pills">
-        <div class="pill">👩‍🏫 <strong>ครูปราณิสา อำทอง</strong></div>
-        <div class="pill">👨‍🏫 <strong>ม.ทัพไทย หลักศิลากุล</strong></div>
-        <div class="pill">👥 นักเรียน <strong>35 คน</strong></div>
-        <div class="pill">📚 <strong>6 วิชา</strong></div>
+  <div id="menu-overlay">
+    <div class="menu-close" onclick="toggleMenu()">✕</div>
+    <div class="menu-item grad-text" onclick="switchView('lobby')">Lobby</div>
+    <div class="menu-item grad-text" onclick="switchView('library')">Library</div>
+    <div class="menu-item grad-text" onclick="switchView('community')">Community</div>
+    <div class="menu-item grad-text" onclick="switchView('settings')">Settings</div>
+    <div class="menu-item" style="color:var(--red); font-size:1.5rem; margin-top:40px;" onclick="logout()">Log Out</div>
+  </div>
+
+  <section id="view-lobby" class="view-section active">
+    
+    <div class="billboard-container" id="billboard-box">
+      <div id="billboard-slider">
+        <div class="billboard-slide active" style="background-image: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2029&auto=format&fit=crop');"></div>
+      </div>
+      <div class="billboard-overlay"></div>
+    </div>
+
+    <div class="lobby-logo grad-text">3006</div>
+
+    <div id="adminLobbyCtrl" class="glass-panel" style="display:none; padding:15px; margin-bottom:30px;">
+      <h3 style="color:var(--a2); font-size:1rem; margin-bottom:10px;">⚙️ Admin: Update Billboard & News</h3>
+      <input type="text" id="inBannerUrl" class="input-3d" placeholder="Image URL for Billboard" style="margin-bottom:10px;">
+      <button class="gold-btn" onclick="addBanner()">Update Billboard</button>
+      <hr style="border:0; height:1px; background:var(--border); margin:15px 0;">
+      <textarea id="inNews" class="input-3d" placeholder="Write a brief / news..." rows="3" style="margin-bottom:10px;"></textarea>
+      <button class="gold-btn" onclick="postNews()">Post Brief</button>
+    </div>
+
+    <div class="progress-section">
+      <h2 class="grad-text" style="margin-bottom: 15px; font-size:1.5rem;">System Overview</h2>
+      <div class="glass-panel" style="padding:20px;">
+        <div class="prog-container">
+          <div class="prog-label"><span>Total Video Materials</span> <span id="progVidCount">0</span></div>
+          <div class="prog-track"><div class="prog-fill" id="progVidFill" style="width:50%;"></div></div>
+        </div>
+        <div class="prog-container" style="margin-bottom:0;">
+          <div class="prog-label"><span>Total Quiz Assessments</span> <span id="progQuizCount">0</span></div>
+          <div class="prog-track"><div class="prog-fill" id="progQuizFill" style="width:70%;"></div></div>
+        </div>
       </div>
     </div>
 
-    <div class="sh"><h2>📚 วิชาเรียน</h2><div class="sh-line"></div></div>
+    <div class="brief-section">
+      <h2 class="grad-text" style="margin-bottom: 15px; font-size:1.5rem;">Latest Briefs</h2>
+      <div id="news-container">
+        </div>
+    </div>
+  </section>
+
+  <section id="view-library" class="view-section">
+    <div class="sh"><h2>📚 คลังวิชาเรียน (Subjects)</h2><div class="sh-line"></div></div>
     <div class="subjects">
-      <div class="sc sci fade-up" onclick="openSubject('sci')">
-        <span class="sc-icon">🔬</span>
-        <div class="sc-name">วิทยาศาสตร์</div>
-        <div class="sc-count" id="cnt-sci">0 วิดีโอ · 0 แบบทดสอบ</div>
-      </div>
-      <div class="sc math fade-up" onclick="openSubject('math')">
-        <span class="sc-icon">📐</span>
-        <div class="sc-name">คณิตศาสตร์</div>
-        <div class="sc-count" id="cnt-math">0 วิดีโอ · 0 แบบทดสอบ</div>
-      </div>
-      <div class="sc eng fade-up" onclick="openSubject('eng')">
-        <span class="sc-icon">🌐</span>
-        <div class="sc-name">ภาษาอังกฤษ</div>
-        <div class="sc-count" id="cnt-eng">0 วิดีโอ · 0 แบบทดสอบ</div>
-      </div>
-      <div class="sc soc fade-up" onclick="openSubject('soc')">
-        <span class="sc-icon">🌏</span>
-        <div class="sc-name">สังคมศึกษา</div>
-        <div class="sc-count" id="cnt-soc">0 วิดีโอ · 0 แบบทดสอบ</div>
-      </div>
-      <div class="sc hist fade-up" onclick="openSubject('hist')">
-        <span class="sc-icon">📜</span>
-        <div class="sc-name">ประวัติศาสตร์</div>
-        <div class="sc-count" id="cnt-hist">0 วิดีโอ · 0 แบบทดสอบ</div>
-      </div>
-      <div class="sc comp fade-up" onclick="openSubject('comp')">
-        <span class="sc-icon">💻</span>
-        <div class="sc-name">คอมพิวเตอร์</div>
-        <div class="sc-count" id="cnt-comp">0 วิดีโอ · 0 แบบทดสอบ</div>
-      </div>
+      <div class="sc glass-panel sci" onclick="openSubject('sci')"><span class="sc-icon">🔬</span><div class="sc-name">วิทยาศาสตร์</div><div class="sc-count" id="cnt-sci">0 วิดีโอ · 0 แบบทดสอบ</div></div>
+      <div class="sc glass-panel math" onclick="openSubject('math')"><span class="sc-icon">📐</span><div class="sc-name">คณิตศาสตร์</div><div class="sc-count" id="cnt-math">0 วิดีโอ · 0 แบบทดสอบ</div></div>
+      <div class="sc glass-panel eng" onclick="openSubject('eng')"><span class="sc-icon">🌐</span><div class="sc-name">ภาษาอังกฤษ</div><div class="sc-count" id="cnt-eng">0 วิดีโอ · 0 แบบทดสอบ</div></div>
+      <div class="sc glass-panel soc" onclick="openSubject('soc')"><span class="sc-icon">🌏</span><div class="sc-name">สังคมศึกษา</div><div class="sc-count" id="cnt-soc">0 วิดีโอ · 0 แบบทดสอบ</div></div>
+      <div class="sc glass-panel hist" onclick="openSubject('hist')"><span class="sc-icon">📜</span><div class="sc-name">ประวัติศาสตร์</div><div class="sc-count" id="cnt-hist">0 วิดีโอ · 0 แบบทดสอบ</div></div>
+      <div class="sc glass-panel comp" onclick="openSubject('comp')"><span class="sc-icon">💻</span><div class="sc-name">คอมพิวเตอร์</div><div class="sc-count" id="cnt-comp">0 วิดีโอ · 0 แบบทดสอบ</div></div>
     </div>
 
-    <div class="sh"><h2>👥 รายชื่อนักเรียน ม.3/6</h2><div class="sh-line"></div></div>
+    <div class="sh" style="margin-top:50px;"><h2>👥 ทำเนียบรุ่น (Directory)</h2><div class="sh-line"></div></div>
     <div class="search-wrap">
-      <input class="search" type="text" placeholder="ค้นหาชื่อหรือรหัสประจำตัว..." oninput="filterTable(this.value)">
+      <input class="input-3d search" type="text" placeholder="ค้นหาชื่อหรือรหัสประจำตัว..." oninput="filterTable(this.value)">
     </div>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap glass-panel">
       <table>
-        <thead>
-          <tr>
-            <th>เลขที่</th><th>รหัสประจำตัว</th><th>ชื่อ</th><th>นามสกุล</th><th>บทบาท</th>
-          </tr>
-        </thead>
+        <thead><tr><th>No.</th><th>ID</th><th>First Name</th><th>Last Name</th><th>Role</th></tr></thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
-  </main>
+  </section>
+
+  <section id="view-community" class="view-section">
+    <div class="sh"><h2>💬 Community Hub</h2><div class="sh-line"></div></div>
+    <div class="glass-panel chat-container">
+      <div class="chat-messages" id="chat-messages">
+        </div>
+      <div class="chat-input-area">
+        <input type="text" id="inChat" class="input-3d" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChat()">
+        <button class="gold-btn" onclick="sendChat()" style="padding:10px 20px;">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-settings" class="view-section">
+    <div class="sh"><h2>⚙️ System Preferences</h2><div class="sh-line"></div></div>
+    <div class="glass-panel" style="padding: 20px;">
+      
+      <div style="margin-bottom:30px;">
+        <label style="display:block; font-size:0.85rem; color:var(--a2); margin-bottom:10px; font-weight:600;">Display Name (Community)</label>
+        <div style="display:flex; gap:10px;">
+          <input type="text" id="inDisplayName" class="input-3d" placeholder="Your custom alias...">
+          <button class="gold-btn" onclick="saveDisplayName()">Save</button>
+        </div>
+        <div style="font-size:0.7rem; color:var(--muted); margin-top:5px;">Real name remains unchanged in Directory.</div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">Dark / Light Theme</div>
+        <div class="toggle-switch" id="tglTheme" onclick="toggleSetting('theme', this)">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">Solid Mode (Disable Glass)</div>
+        <div class="toggle-switch" id="tglSolid" onclick="toggleSetting('solid', this)">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+      <div class="setting-row" style="border:none;">
+        <div class="setting-label">Lite Mode (Disable 3D/Anim/Bg)</div>
+        <div class="toggle-switch" id="tglLite" onclick="toggleSetting('lite', this)">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
 </div>
 
 <div class="overlay" id="overlay" onclick="overlayBg(event)">
-  <div class="modal">
+  <div class="glass-panel modal">
     <div class="modal-hd">
-      <div class="modal-title" id="mTitle">วิชา</div>
+      <div class="modal-title" id="mTitle">Subject</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-
-      <div class="admin-wrap" id="adminWrap" style="display:none">
+      <div class="glass-panel admin-wrap" id="adminWrap" style="display:none; background:rgba(212,175,55,0.05); border-color:var(--a);">
         <div class="admin-title">⚙️ Admin Control Panel</div>
         <div class="tabs" id="adminTabs">
-          <button class="tab on" onclick="switchAdminTab('vid',this)">📹 เพิ่มวิดีโอ</button>
-          <button class="tab" onclick="switchAdminTab('quiz',this)">📝 สร้างแบบทดสอบ</button>
+          <button class="tab on gold-btn" style="box-shadow:none; border:none;" onclick="switchAdminTab('vid',this)">📹 Upload Video</button>
+          <button class="tab" onclick="switchAdminTab('quiz',this)">📝 Create Quiz</button>
         </div>
-
         <div id="vidForm" class="aform">
-          <input id="vTitle" placeholder="ชื่อวิดีโอ (จำเป็น)">
+          <input id="vTitle" class="input-3d" placeholder="Video Title">
           <div class="vsrc-tabs">
             <button class="vsrc on" id="vsYT" onclick="switchSrc('yt',this)">🔗 YouTube URL</button>
-            <button class="vsrc" id="vsFile" onclick="switchSrc('file',this)">📁 อัปโหลดไฟล์</button>
+            <button class="vsrc" id="vsFile" onclick="switchSrc('file',this)">📁 Local File</button>
           </div>
-
-          <div id="srcYT">
-            <input id="vUrl" placeholder="https://youtu.be/xxxxx หรือ youtube.com/watch?v=xxxxx">
-          </div>
-
+          <div id="srcYT"><input id="vUrl" class="input-3d" placeholder="YouTube Link"></div>
           <div id="srcFile" style="display:none">
-            <label class="dropzone" id="dropzone" for="vFile">
+            <label class="dropzone glass-panel" id="dropzone" for="vFile">
               <input type="file" id="vFile" accept="video/*" style="display:none" onchange="onFileChange(this)">
               <div id="dropInner">
                 <div class="dropzone-icon">🎬</div>
-                <div class="dropzone-label">คลิกหรือลากไฟล์วิดีโอมาวางที่นี่</div>
-                <div class="dropzone-sub">รองรับ MP4, MOV, WebM, AVI, MKV</div>
+                <div class="dropzone-label">Click to select file</div>
               </div>
             </label>
             <div id="filePreview">
-              <video id="previewVid" controls></video>
-              <div class="fpname" id="fpName"></div>
-              <button class="btn-clear-file" onclick="clearFile()">✕ เลือกใหม่</button>
-            </div>
-            <div class="prog-wrap" id="progWrap">
-              <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-              <div class="prog-txt" id="progTxt">กำลังบันทึกข้อมูล...</div>
+              <video id="previewVid" controls style="width:100%; border-radius:10px; margin-top:10px;"></video>
+              <button class="gold-btn" onclick="clearFile()" style="margin-top:10px; width:100%; font-size:0.8rem;">Clear File</button>
             </div>
           </div>
-
-          <button class="btn-admin" onclick="addVideo()">➕ เผยแพร่วิดีโอ</button>
+          <button class="gold-btn" onclick="addVideo()">Upload Content</button>
         </div>
-
         <div id="quizForm" class="aform" style="display:none">
-          <input id="qTitle" placeholder="ชื่อแบบทดสอบ">
+          <input id="qTitle" class="input-3d" placeholder="Quiz Title">
           <div id="qContainer"></div>
-          <button class="btn-add-q" onclick="addQ()">+ เพิ่มคำถามประเมินผล</button>
-          <button class="btn-admin" onclick="saveQuiz()">💾 บันทึกชุดแบบทดสอบ</button>
+          <button class="gold-btn" style="background:transparent !important; border:1px dashed var(--a) !important; color:var(--a) !important; box-shadow:none !important;" onclick="addQ()">+ Add Question</button>
+          <button class="gold-btn" onclick="saveQuiz()">Save Quiz</button>
         </div>
       </div>
 
       <div class="tabs" id="contentTabs">
-        <button class="tab on" onclick="switchContent('vids',this)">📹 คลังวิดีโอสอน</button>
-        <button class="tab" onclick="switchContent('quiz',this)">📝 ชุดแบบทดสอบ</button>
+        <button class="tab on gold-btn" style="box-shadow:none; border:none;" onclick="switchContent('vids',this)">📹 Videos</button>
+        <button class="tab" onclick="switchContent('quiz',this)">📝 Quizzes</button>
       </div>
 
-      <div id="panelVids">
-        <div id="vgrid" class="vgrid"></div>
-      </div>
+      <div id="panelVids"><div id="vgrid" class="vgrid"></div></div>
       <div id="panelQuiz" style="display:none">
         <div id="qlistEl" class="qlist"></div>
         <div id="quizPlay">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-            <button class="qback" onclick="exitQuiz()">← กลับ</button>
-            <span id="qPlayTitle" style="font-family:'Kanit',sans-serif;font-size:.95rem;color:var(--a2);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.8)"></span>
+            <button class="gold-btn" style="padding:6px 12px; font-size:0.8rem;" onclick="exitQuiz()">← Back</button>
+            <span id="qPlayTitle" class="grad-text" style="font-size:1.1rem; font-weight:800;"></span>
           </div>
           <div id="qQuestionView">
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--a);margin-bottom:8px">
-              <span>คำถามข้อที่ <span id="qN">1</span> / <span id="qT">1</span></span>
-              <span>คะแนน: <span id="qS" style="color:var(--white);font-weight:700;">0</span></span>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--a);margin-bottom:8px;font-weight:600;">
+              <span>Question <span id="qN">1</span>/<span id="qT">1</span></span>
+              <span>Score: <span id="qS" style="color:var(--white);">0</span></span>
             </div>
-            <div class="qprog-bar"><div class="qprog-fill" id="qProg"></div></div>
-            <div class="qbox">
-              <div class="qtext" id="qText"></div>
+            <div style="height:6px; background:rgba(0,0,0,0.5); border-radius:3px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border);">
+              <div id="qProg" style="height:100%; background:linear-gradient(90deg,var(--a),var(--a2)); width:0%; transition:width .4s;"></div>
+            </div>
+            <div class="glass-panel qbox">
+              <div class="qtext grad-text" id="qText" style="font-size:1.2rem; font-weight:700; margin-bottom:20px;"></div>
               <div class="opts-grid" id="optsList"></div>
             </div>
           </div>
-          <div id="qResult" class="result-box" style="display:none">
-            <div class="score-ring" id="scoreRing">
-              <div class="score-inner">
-                <div class="score-num" id="scoreNum">0/0</div>
-                <div class="score-lbl">คะแนนประเมิน</div>
-              </div>
-            </div>
-            <div class="score-msg" id="scoreMsg" style="color:var(--a2);"></div>
-            <div class="score-detail" id="scoreDetail"></div>
-            <button class="btn-start" onclick="retryQuiz()" style="margin-right:8px">🔄 ทำอีกครั้ง</button>
-            <button class="qback" onclick="exitQuiz()">กลับรายการหลัก</button>
+          <div id="qResult" class="glass-panel result-box" style="display:none">
+            <h2 class="grad-text" style="font-size:2rem; margin-bottom:10px;" id="scoreNum">0/0</h2>
+            <div class="score-msg" id="scoreMsg" style="color:var(--a2); margin-bottom:20px;"></div>
+            <button class="gold-btn" onclick="retryQuiz()">Retry</button>
+            <button class="gold-btn" onclick="exitQuiz()" style="background:transparent!important; color:var(--a)!important; border:1px solid var(--a)!important; box-shadow:none!important;">Close</button>
           </div>
         </div>
       </div>
@@ -509,10 +528,9 @@ tr:hover td{background:rgba(212,175,55,.05)}
   </div>
 </div>
 
-<div id="vidOverlay" onclick="closeVid(event)">
+<div id="vidOverlay" class="overlay" onclick="closeVid(event)">
   <div class="vid-box">
-    <div class="vid-label" id="vidLabel"></div>
-    <button class="vid-close" onclick="closeVid(null,true)">✕</button>
+    <button class="gold-btn" style="position:absolute; top:-50px; right:0; padding:8px 15px;" onclick="closeVid(null,true)">Close ✕</button>
     <div id="vidContent"></div>
   </div>
 </div>
@@ -523,15 +541,24 @@ tr:hover td{background:rgba(212,175,55,.05)}
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-/* ══════════════ [SECURITY] ANTI-INSPECT ══════════════ */
-// ปิดการคลิกขวา
+/* ══════════════ SECURITY & UX ══════════════ */
 document.addEventListener('contextmenu', e => e.preventDefault());
-// ป้องกันการใช้คีย์ลัด Inspect/View Source
 document.onkeydown = function(e) {
-  if (e.keyCode === 123) return false; // F12
-  if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false; // Ctrl+Shift+I, J, C
-  if (e.ctrlKey && e.keyCode === 85) return false; // Ctrl+U
+  if (e.keyCode === 123) return false;
+  if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false;
+  if (e.ctrlKey && e.keyCode === 85) return false;
 };
+
+// Scroll Parallax for Billboard
+window.addEventListener('scroll', () => {
+  const lobby = document.getElementById('view-lobby');
+  if(lobby.classList.contains('active')) {
+    let scrollY = window.scrollY;
+    let opacity = 1 - (scrollY / 300);
+    if(opacity < 0) opacity = 0;
+    document.getElementById('billboard-box').style.opacity = opacity;
+  }
+});
 
 /* ══════════════ FIREBASE INITIALIZE ══════════════ */
 const firebaseConfig = {
@@ -539,219 +566,234 @@ const firebaseConfig = {
   authDomain: "ac-library-c63ee.firebaseapp.com",
   databaseURL: "https://ac-library-c63ee-default-rtdb.firebaseio.com",
   projectId: "ac-library-c63ee",
-  storageBucket: "ac-library-c63ee.firebasestorage.app",
-  messagingSenderId: "839731834004",
-  appId: "1:839731834004:web:c5bcd84db9a6fa836ed881",
-  measurementId: "G-QFQDH5HBXG"
+  storageBucket: "ac-library-c63ee.firebasestorage.app"
 };
-
-// เริ่มการเชื่อมต่อกับฐานข้อมูล Firebase
 firebase.initializeApp(firebaseConfig);
-const dbRef = firebase.database().ref('ac_library_data');
+const dbRef = firebase.database().ref('3006_data'); // Changed root node to 3006
+const dbLibrary = dbRef.child('library');
+const dbNews = dbRef.child('news');
+const dbChat = dbRef.child('chat');
+const dbBanners = dbRef.child('banners');
 
-/* ══════════════ DATA ══════════════ */
+/* ══════════════ DATA & STATE ══════════════ */
 const STUDENTS=[
-  {no:1,id:'56006',first:'ณัฐธีร์',last:'ชาติชีวินทร์'},
-  {no:2,id:'56044',first:'ภูวิชญ์',last:'บุญมี'},
-  {no:3,id:'56269',first:'ธนเดช',last:'วงษ์ชูแก้ว'},
-  {no:4,id:'56315',first:'พิจักษณ์',last:'ทองสมัครพันธ์'},
-  {no:5,id:'56363',first:'นัธทวัฒน์',last:'เพ็ชรพันธ์'},
-  {no:6,id:'56369',first:'ณัฐภูมินทร์',last:'ไตรทิพย์วิทยา'},
-  {no:7,id:'56392',first:'กรวิชญ์',last:'อำพันสุข'},
-  {no:8,id:'56398',first:'ชนาธิป',last:'สนุกล้ำ'},
-  {no:9,id:'56406',first:'พงศ์ชัย',last:'จาง'},
-  {no:10,id:'56431',first:'กันตพัฒน์',last:'เลิศไพศาลกรกุล'},
-  {no:11,id:'56462',first:'ธนกฤต',last:'ทิตยาคุณาธร'},
-  {no:12,id:'56506',first:'รัชพล',last:'จรัสพัฒน์'},
-  {no:13,id:'56516',first:'ศักดิ์ธวัช',last:'ฐานานุศักดิ์'},
-  {no:14,id:'56523',first:'บุญญปัญญ์',last:'เสริมสุข'},
-  {no:15,id:'56527',first:'ธนกฤต',last:'ศุภรังค์'},
-  {no:16,id:'56538',first:'ณฐพงศ์',last:'คุณจักร'},
-  {no:17,id:'56548',first:'ธีภพ',last:'ทองคุ้ม'},
-  {no:18,id:'56552',first:'กฤติธี',last:'ชาญนคร'},
-  {no:19,id:'56563',first:'สรวิชญ์',last:'สมจิตร'},
-  {no:20,id:'56566',first:'อริย์ธัช',last:'นภัสกรสิริโชติ'},
-  {no:21,id:'56602',first:'สุจิรภาคย์',last:'บำเพ็ญรัตน์'},
-  {no:22,id:'56629',first:'กรณ์ฐู',last:'ปลอดภัย'},
-  {no:23,id:'56639',first:'ปรานต์',last:'เบญจพลาพร'},
-  {no:24,id:'56648',first:'สุกฤษฎิ์',last:'เอี่ยมศักดิ์อุฬาร'},
-  {no:25,id:'57509',first:'คุณภชา',last:'อภิรักษ์ภูบาล'},
-  {no:26,id:'59891',first:'กฤษฎิ์',last:'กันชะศิวัฒน์'},
-  {no:27,id:'59892',first:'อนพัทย์',last:'มะลิวงศ์'},
-  {no:28,id:'59898',first:'ปภังกร',last:'อิ้งพานิช'},
-  {no:29,id:'59899',first:'ภูวิน',last:'ชัยอดิศักดิ์โสภา'},
-  {no:30,id:'59904',first:'ศิวะนนท์',last:'เอกศิรินวนันท์'},
-  {no:31,id:'59927',first:'ฉันทกร',last:'ฉันทโชติ'},
-  {no:32,id:'59947',first:'พัชรธร',last:'ศรีประมงค์'},
-  {no:33,id:'59953',first:'พิชญ์ตม์',last:'จันทร์วัง'},
-  {no:34,id:'60041',first:'ชนะชัย',last:'วราวรรณ ณ อยุธยา'},
+  {no:1,id:'56006',first:'ณัฐธีร์',last:'ชาติชีวินทร์'}, {no:2,id:'56044',first:'ภูวิชญ์',last:'บุญมี'},
+  {no:3,id:'56269',first:'ธนเดช',last:'วงษ์ชูแก้ว'}, {no:4,id:'56315',first:'พิจักษณ์',last:'ทองสมัครพันธ์'},
+  {no:5,id:'56363',first:'นัธทวัฒน์',last:'เพ็ชรพันธ์'}, {no:6,id:'56369',first:'ณัฐภูมินทร์',last:'ไตรทิพย์วิทยา'},
+  {no:7,id:'56392',first:'กรวิชญ์',last:'อำพันสุข'}, {no:8,id:'56398',first:'ชนาธิป',last:'สนุกล้ำ'},
+  {no:9,id:'56406',first:'พงศ์ชัย',last:'จาง'}, {no:10,id:'56431',first:'กันตพัฒน์',last:'เลิศไพศาลกรกุล'},
+  {no:11,id:'56462',first:'ธนกฤต',last:'ทิตยาคุณาธร'}, {no:12,id:'56506',first:'รัชพล',last:'จรัสพัฒน์'},
+  {no:13,id:'56516',first:'ศักดิ์ธวัช',last:'ฐานานุศักดิ์'}, {no:14,id:'56523',first:'บุญญปัญญ์',last:'เสริมสุข'},
+  {no:15,id:'56527',first:'ธนกฤต',last:'ศุภรังค์'}, {no:16,id:'56538',first:'ณฐพงศ์',last:'คุณจักร'},
+  {no:17,id:'56548',first:'ธีภพ',last:'ทองคุ้ม'}, {no:18,id:'56552',first:'กฤติธี',last:'ชาญนคร'},
+  {no:19,id:'56563',first:'สรวิชญ์',last:'สมจิตร'}, {no:20,id:'56566',first:'อริย์ธัช',last:'นภัสกรสิริโชติ'},
+  {no:21,id:'56602',first:'สุจิรภาคย์',last:'บำเพ็ญรัตน์'}, {no:22,id:'56629',first:'กรณ์ฐู',last:'ปลอดภัย'},
+  {no:23,id:'56639',first:'ปรานต์',last:'เบญจพลาพร'}, {no:24,id:'56648',first:'สุกฤษฎิ์',last:'เอี่ยมศักดิ์อุฬาร'},
+  {no:25,id:'57509',first:'คุณภชา',last:'อภิรักษ์ภูบาล'}, {no:26,id:'59891',first:'กฤษฎิ์',last:'กันชะศิวัฒน์'},
+  {no:27,id:'59892',first:'อนพัทย์',last:'มะลิวงศ์'}, {no:28,id:'59898',first:'ปภังกร',last:'อิ้งพานิช'},
+  {no:29,id:'59899',first:'ภูวิน',last:'ชัยอดิศักดิ์โสภา'}, {no:30,id:'59904',first:'ศิวะนนท์',last:'เอกศิรินวนันท์'},
+  {no:31,id:'59927',first:'ฉันทกร',last:'ฉันทโชติ'}, {no:32,id:'59947',first:'พัชรธร',last:'ศรีประมงค์'},
+  {no:33,id:'59953',first:'พิชญ์ตม์',last:'จันทร์วัง'}, {no:34,id:'60041',first:'ชนะชัย',last:'วราวรรณ ณ อยุธยา'},
   {no:35,id:'60455',first:'ฐาปกรณ์',last:'เจริญกิจรักษา'},
 ];
 const ADMIN_NO='27', ADMIN_PASS='anapatmaliwong59892';
 const SUBJ_ICONS={sci:'🔬 วิทยาศาสตร์',math:'📐 คณิตศาสตร์',eng:'🌐 ภาษาอังกฤษ',soc:'🌏 สังคมศึกษา',hist:'📜 ประวัติศาสตร์',comp:'💻 คอมพิวเตอร์'};
 
-/* ══════════════ STATE ══════════════ */
-let user=null,isAdmin=false,subj=null,selFile=null;
-let curQuiz=null,qIdx=0,qOk=0;
-let tempQs=[];
-let curSrc='yt';
-let DB_DATA={}; // ตัวแปรเก็บข้อมูล Cache จาก Firebase บนหน่วยความจำสำรอง
+let user=null, isAdmin=false, subj=null, selFile=null;
+let curQuiz=null, qIdx=0, qOk=0, tempQs=[], curSrc='yt';
+let DB_LIB={}, DB_NEWS={}, DB_CHAT={}, DB_BANNERS=[];
 
 /* ══════════════ SYNC FROM FIREBASE ══════════════ */
-// คอยดักฟังเมื่อคลาวด์มีการเปลี่ยนแปลง ข้อมูลจะอัปเดตหน้าจอทุกคนทันที
-dbRef.on('value', snapshot => {
-  DB_DATA = snapshot.val() || {};
+dbRef.on('value', snap => {
+  const data = snap.val() || {};
+  DB_LIB = data.library || {};
+  DB_NEWS = data.news || {};
+  DB_CHAT = data.chat || {};
+  DB_BANNERS = data.banners ? Object.values(data.banners) : ["https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2000"];
+  
   updateCounts();
+  updateProgress();
+  renderNews();
+  renderChat();
+  renderBanners();
+
   if(subj && document.getElementById('overlay').classList.contains('open')){
-    renderVids();
-    renderQuizList();
+    renderVids(); renderQuizList();
   }
 });
 
-/* ══════════════ INDEXEDDB (สำหรับวิดีโอแบบ Local File) ══════════════ */
-let db=null;
-const IDB_NAME='ACLib',IDB_VER=1,STORE='vfiles';
-function initDB(){
-  return new Promise(r=>{
-    const req=indexedDB.open(IDB_NAME,IDB_VER);
-    req.onupgradeneeded=e=>{
-      const d=e.target.result;
-      if(!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE,{keyPath:'fid'});
-    };
-    req.onsuccess=e=>{db=e.target.result;r()};
-    req.onerror=()=>r();
-  });
-}
-function dbSave(fid,file){
-  return new Promise((ok,err)=>{
-    if(!db){err(new Error('DB not ready'));return}
-    const tx=db.transaction(STORE,'readwrite');
-    tx.objectStore(STORE).put({fid,file});
-    tx.oncomplete=ok; tx.onerror=err;
-  });
-}
-function dbGet(fid){
-  return new Promise((ok,err)=>{
-    if(!db){ok(null);return}
-    const req=db.transaction(STORE,'readonly').objectStore(STORE).get(fid);
-    req.onsuccess=e=>ok(e.target.result?.file||null);
-    req.onerror=err;
-  });
-}
-function dbDel(fid){
-  return new Promise(ok=>{
-    if(!db){ok();return}
-    const tx=db.transaction(STORE,'readwrite');
-    tx.objectStore(STORE).delete(fid);
-    tx.oncomplete=ok; tx.onerror=ok;
-  });
-}
+function getC(s){ return DB_LIB[s] || {videos:[],quizzes:[]}; }
+function setC(s,d){ DB_LIB[s] = d; dbLibrary.child(s).set(d); }
 
-/* ══════════════ DATA STORAGE BRIDGE ══════════════ */
-function getC(s){ return DB_DATA[s] || {videos:[],quizzes:[]}; }
-function setC(s,d){ DB_DATA[s] = d; dbRef.child(s).set(d); }
-
-/* ══════════════ ANIMATED BG ══════════════ */
-(function(){
-  const canvas=document.getElementById('bg-canvas');
-  const ctx=canvas.getContext('2d');
-  let W,H,orbs=[];
-  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
-  function mkOrbs(){
-    orbs=[];
-    const cols=['rgba(212,175,55','rgba(252,246,186','rgba(170,119,28'];
-    for(let i=0;i<5;i++){
-      orbs.push({
-        x:Math.random()*W, y:Math.random()*H, r:Math.random()*250+150,
-        dx:(Math.random()-.5)*.15, dy:(Math.random()-.5)*.15,
-        col:cols[i%cols.length], a:Math.random()*.04+.02
-      });
-    }
-  }
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    orbs.forEach(o=>{
-      const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
-      g.addColorStop(0,o.col+','+o.a+')');
-      g.addColorStop(1,o.col+',0)');
-      ctx.fillStyle=g; ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fill();
-      o.x+=o.dx; o.y+=o.dy;
-      if(o.x<-o.r||o.x>W+o.r) o.dx*=-1;
-      if(o.y<-o.r||o.y>H+o.r) o.dy*=-1;
-    });
-    requestAnimationFrame(draw);
-  }
-  window.addEventListener('resize',()=>{resize();mkOrbs()});
-  resize(); mkOrbs(); draw();
-})();
-
-/* ══════════════ [AUTH] LOGIN & REMEMBER ME ══════════════ */
+/* ══════════════ AUTH & AUTO-LOGIN ══════════════ */
 function processLoginUI(s, forceAdmin = false) {
-    user=s; 
-    isAdmin = forceAdmin || (s.no === 27);
-    document.getElementById('loginPage').style.display='none';
-    document.getElementById('app').style.display='block';
-    document.getElementById('navAva').textContent=s.first.charAt(0);
-    document.getElementById('navName').textContent='เลขที่ '+s.no+' · '+s.first;
-    document.getElementById('navAdmin').style.display=isAdmin?'inline':'none';
-    renderTable(STUDENTS); updateCounts();
+  user=s; isAdmin = forceAdmin || (s.no === 27);
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('navAva').textContent=s.first.charAt(0);
+  document.getElementById('navAdmin').style.display=isAdmin?'inline':'none';
+  document.getElementById('adminLobbyCtrl').style.display=isAdmin?'block':'none';
+  
+  // Set Display Name Default
+  let dName = localStorage.getItem('3006_display_name');
+  if(!dName) { dName = s.first; localStorage.setItem('3006_display_name', dName); }
+  document.getElementById('inDisplayName').value = dName;
+  
+  renderTable(STUDENTS); updateCounts(); updateProgress();
+  switchView('lobby');
 }
 
 function doLogin(){
   const no=document.getElementById('inNo').value.trim();
   const pw=document.getElementById('inPass').value.trim();
-  if(no===ADMIN_NO&&pw===ADMIN_PASS){
+  if(no===ADMIN_NO && pw===ADMIN_PASS){
     const s=STUDENTS.find(x=>x.no===27);
-    processLoginUI(s, true);
-    // Save to localStorage for Auto-Login
-    localStorage.setItem('ac_auth_session', JSON.stringify({no: s.no, role: 'admin'}));
-    return;
+    localStorage.setItem('3006_session', JSON.stringify({no: s.no, role: 'admin'}));
+    processLoginUI(s, true); return;
   }
-  if(no===ADMIN_NO){document.getElementById('loginErr').style.display='block';return}
-  const s=STUDENTS.find(x=>String(x.no)===no&&x.id===pw);
-  if(!s){document.getElementById('loginErr').style.display='block';return}
+  const s=STUDENTS.find(x=>String(x.no)===no && x.id===pw);
+  if(!s){ document.getElementById('loginErr').style.display='block'; return; }
   
+  localStorage.setItem('3006_session', JSON.stringify({no: s.no, role: 'user'}));
   processLoginUI(s, false);
-  // Save to localStorage for Auto-Login
-  localStorage.setItem('ac_auth_session', JSON.stringify({no: s.no, role: 'user'}));
 }
 
 function logout(){
-  user=null;isAdmin=false;
-  localStorage.removeItem('ac_auth_session'); // Clear session
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginPage').style.display='flex';
-  document.getElementById('inNo').value='';
-  document.getElementById('inPass').value='';
-  document.getElementById('loginErr').style.display='none';
+  localStorage.removeItem('3006_session');
+  location.reload();
 }
 
 function checkAutoLogin() {
-  const sessionData = localStorage.getItem('ac_auth_session');
-  if (sessionData) {
+  const session = localStorage.getItem('3006_session');
+  if(session) {
     try {
-      const parsed = JSON.parse(sessionData);
+      const parsed = JSON.parse(session);
       const s = STUDENTS.find(x => x.no === parsed.no);
-      if(s) {
-         processLoginUI(s, parsed.role === 'admin');
-      } else {
-         localStorage.removeItem('ac_auth_session');
-      }
+      if(s) processLoginUI(s, parsed.role === 'admin');
+      else localStorage.removeItem('3006_session');
     } catch(e) {}
   }
 }
 
-document.getElementById('inPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
-document.getElementById('inNo').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+/* ══════════════ ROUTING & NAVIGATION ══════════════ */
+function toggleMenu() {
+  document.getElementById('menu-overlay').classList.toggle('active');
+}
+function switchView(vId) {
+  document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + vId).classList.add('active');
+  document.getElementById('menu-overlay').classList.remove('active');
+  window.scrollTo(0,0);
+}
 
-/* ══════════════ TABLE ══════════════ */
+/* ══════════════ SETTINGS & THEMES ══════════════ */
+function toggleSetting(type, el) {
+  el.classList.toggle('on');
+  const isOn = el.classList.contains('on');
+  localStorage.setItem('3006_set_'+type, isOn);
+  applySettings();
+}
+function saveDisplayName() {
+  const nm = document.getElementById('inDisplayName').value.trim();
+  if(nm) {
+    localStorage.setItem('3006_display_name', nm);
+    toast('Display name updated!');
+  }
+}
+function applySettings() {
+  const isLight = localStorage.getItem('3006_set_theme') === 'true';
+  const isSolid = localStorage.getItem('3006_set_solid') === 'true';
+  const isLite = localStorage.getItem('3006_set_lite') === 'true';
+  
+  if(isLight) { document.body.classList.add('light-theme'); document.getElementById('tglTheme').classList.add('on'); } 
+  else { document.body.classList.remove('light-theme'); document.getElementById('tglTheme').classList.remove('on'); }
+  
+  if(isSolid) { document.body.classList.add('solid-buttons'); document.getElementById('tglSolid').classList.add('on'); } 
+  else { document.body.classList.remove('solid-buttons'); document.getElementById('tglSolid').classList.remove('on'); }
+  
+  if(isLite) { document.body.classList.add('lite-mode'); document.getElementById('tglLite').classList.add('on'); } 
+  else { document.body.classList.remove('lite-mode'); document.getElementById('tglLite').classList.remove('on'); }
+}
+
+/* ══════════════ LOBBY LOGIC ══════════════ */
+function addBanner() {
+  const url = document.getElementById('inBannerUrl').value.trim();
+  if(!url) return;
+  dbBanners.push(url);
+  document.getElementById('inBannerUrl').value='';
+  toast('Billboard Updated!');
+}
+function renderBanners() {
+  const box = document.getElementById('billboard-slider');
+  if(!DB_BANNERS.length) return;
+  // Just showing the latest banner for simplicity, or creating a slide
+  const latest = DB_BANNERS[DB_BANNERS.length-1];
+  box.innerHTML = `<div class="billboard-slide active" style="background-image: url('${latest}');"></div>`;
+}
+
+function postNews() {
+  const text = document.getElementById('inNews').value.trim();
+  if(!text) return;
+  dbNews.push({ text: text, time: Date.now(), author: 'System Admin' });
+  document.getElementById('inNews').value='';
+  toast('Brief Posted!');
+}
+function renderNews() {
+  const cont = document.getElementById('news-container');
+  const newsArr = Object.values(DB_NEWS).sort((a,b)=>b.time-a.time);
+  if(!newsArr.length) { cont.innerHTML = '<p style="color:var(--muted)">No recent briefs.</p>'; return; }
+  cont.innerHTML = newsArr.map(n => `
+    <div class="glass-panel brief-card">
+      <div class="brief-meta">${new Date(n.time).toLocaleString('th-TH')} • ${n.author}</div>
+      <div class="brief-text">${escHtml(n.text)}</div>
+    </div>
+  `).join('');
+}
+
+function updateProgress() {
+  let vTot=0, qTot=0;
+  ['sci','math','eng','soc','hist','comp'].forEach(s=>{
+    let c = DB_LIB[s] || {};
+    if(c.videos) vTot += Object.keys(c.videos).length;
+    if(c.quizzes) qTot += Object.keys(c.quizzes).length;
+  });
+  document.getElementById('progVidCount').textContent = vTot;
+  document.getElementById('progQuizCount').textContent = qTot;
+  // Placeholder visual logic (assume 50 is max goal for demo)
+  let vPct = Math.min((vTot/50)*100, 100);
+  let qPct = Math.min((qTot/20)*100, 100);
+  document.getElementById('progVidFill').style.width = (vPct===0?5:vPct)+'%';
+  document.getElementById('progQuizFill').style.width = (qPct===0?5:qPct)+'%';
+}
+
+/* ══════════════ COMMUNITY LOGIC ══════════════ */
+function sendChat() {
+  const text = document.getElementById('inChat').value.trim();
+  if(!text) return;
+  const dName = localStorage.getItem('3006_display_name') || user.first;
+  dbChat.push({ text: text, time: Date.now(), author: dName, no: user.no });
+  document.getElementById('inChat').value='';
+}
+function renderChat() {
+  const box = document.getElementById('chat-messages');
+  const chats = Object.values(DB_CHAT).sort((a,b)=>a.time-b.time);
+  box.innerHTML = chats.map(c => `
+    <div class="chat-msg ${c.no === user.no ? 'mine' : ''}">
+      <div class="chat-author">${escHtml(c.author)} ${c.no===27?'⭐':''}</div>
+      <div class="chat-text">${escHtml(c.text)}</div>
+      <div class="chat-time">${new Date(c.time).toLocaleTimeString('th-TH')}</div>
+    </div>
+  `).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+/* ══════════════ ORIGINAL LIBRARY & MODAL LOGIC ══════════════ */
 function renderTable(list){
-  document.getElementById('tbody').innerHTML=list.map(s=>`
+  document.getElementById('tbody').innerHTML=list.map((s,i)=>`
     <tr class="${s.no===27?'tr-admin':''}">
-      <td class="td-no">${s.no}</td>
-      <td class="td-id">${s.id}</td>
+      <td>${s.no}</td><td style="color:var(--a2)">${s.id}</td>
       <td>${s.first}</td><td>${s.last}</td>
-      <td>${s.no===27?'<span class="badge-admin">ADMIN</span>':'นักเรียน'}</td>
+      <td>${s.no===27?'⭐ Admin':'User'}</td>
     </tr>`).join('');
 }
 function filterTable(q){
@@ -759,25 +801,20 @@ function filterTable(q){
   const f=STUDENTS.filter(s=>s.first.includes(q)||s.last.includes(q)||s.id.includes(q)||String(s.no)===q);
   renderTable(f);
 }
-
-/* ══════════════ COUNTS ══════════════ */
 function updateCounts(){
   ['sci','math','eng','soc','hist','comp'].forEach(s=>{
     const d=getC(s);
     const el=document.getElementById('cnt-'+s);
-    if(el) el.textContent=`${d.videos?d.videos.length:0} วิดีโอ · ${d.quizzes?d.quizzes.length:0} แบบทดสอบ`;
+    if(el) el.textContent=`${d.videos?Object.keys(d.videos).length:0} วิดีโอ · ${d.quizzes?Object.keys(d.quizzes).length:0} แบบทดสอบ`;
   });
 }
 
-/* ══════════════ MODAL ══════════════ */
 function openSubject(s){
-  subj=s;
-  document.getElementById('mTitle').textContent=SUBJ_ICONS[s];
+  subj=s; document.getElementById('mTitle').textContent=SUBJ_ICONS[s];
   document.getElementById('adminWrap').style.display=isAdmin?'block':'none';
   switchContent('vids',document.querySelector('#contentTabs .tab'));
   renderVids(); renderQuizList();
-  document.getElementById('overlay').classList.add('open');
-  exitQuiz();
+  document.getElementById('overlay').classList.add('open'); exitQuiz();
 }
 function closeModal(){document.getElementById('overlay').classList.remove('open')}
 function overlayBg(e){if(e.target===document.getElementById('overlay'))closeModal()}
@@ -790,244 +827,115 @@ function switchAdminTab(tab,btn){
 }
 function switchContent(tab,btn){
   document.querySelectorAll('#contentTabs .tab').forEach(b=>b.classList.remove('on'));
-  if(btn)btn.classList.add('on');
+  btn.classList.add('on');
   document.getElementById('panelVids').style.display=tab==='vids'?'block':'none';
   document.getElementById('panelQuiz').style.display=tab==='quiz'?'block':'none';
 }
 
-/* ══════════════ VIDEO SOURCE ══════════════ */
 function switchSrc(src,btn){
   curSrc=src;
   document.querySelectorAll('.vsrc').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('srcYT').style.display=src==='yt'?'block':'none';
   document.getElementById('srcFile').style.display=src==='file'?'block':'none';
-  if(src==='yt')clearFile();
-  else document.getElementById('vUrl').value='';
 }
 
-/* ══════════════ FILE HANDLING ══════════════ */
-(function(){
-  const zone=document.getElementById('dropzone');
-  if(zone){
-    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag')});
-    zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
-    zone.addEventListener('drop',e=>{
-      e.preventDefault();zone.classList.remove('drag');
-      const f=e.dataTransfer.files[0];
-      if(f&&f.type.startsWith('video/'))applyFile(f);
-      else toast('กรุณาเลือกไฟล์วิดีโอ','err');
-    });
-  }
-})();
-
-function onFileChange(el){if(el.files[0])applyFile(el.files[0])}
-function applyFile(f){
-  selFile=f;
-  const url=URL.createObjectURL(f);
-  const vid=document.getElementById('previewVid');
-  vid.src=url;
-  document.getElementById('dropzone').style.display='none';
-  document.getElementById('filePreview').style.display='block';
-  document.getElementById('fpName').textContent=`📁 ${f.name} (${(f.size/1024/1024).toFixed(1)} MB)`;
-}
-function clearFile(){
-  selFile=null;
-  const vid=document.getElementById('previewVid');
-  if(vid && vid.src)URL.revokeObjectURL(vid.src);
-  if(vid) vid.src='';
-  const vf=document.getElementById('vFile');
-  if(vf) vf.value='';
-  document.getElementById('dropzone').style.display='block';
-  document.getElementById('filePreview').style.display='none';
-}
-
-/* ══════════════ ADD VIDEO ══════════════ */
-function ytId(url){
-  const m=url.match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/);
-  return m?m[1]:null;
-}
-async function addVideo(){
+/* ══════════════ VIDEO LOGIC ══════════════ */
+function ytId(url){ const m=url.match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/); return m?m[1]:null; }
+function addVideo(){
   const title=document.getElementById('vTitle').value.trim();
-  if(!title){toast('กรุณากรอกชื่อวิดีโอ','err');return}
+  if(!title) return toast('ใส่ชื่อวิดีโอด้วยครับ','err');
   if(curSrc==='yt'){
     const url=document.getElementById('vUrl').value.trim();
     const id=ytId(url);
-    if(!id){toast('YouTube URL ไม่ถูกต้อง','err');return}
+    if(!id) return toast('YouTube URL ไม่ถูกต้อง','err');
     const d=getC(subj);
     if(!d.videos) d.videos = [];
     d.videos.push({id:Date.now(),title,type:'yt',ytId:id});
     setC(subj,d);
-    document.getElementById('vTitle').value='';
-    document.getElementById('vUrl').value='';
-    renderVids(); updateCounts();
-    toast('✅ เพิ่มวิดีโอ YouTube แล้ว');
-  } else {
-    if(!selFile){toast('กรุณาเลือกไฟล์วิดีโอ','err');return}
-    const fid='vf_'+Date.now();
-    const pw=document.getElementById('progWrap');
-    const pf=document.getElementById('progFill');
-    const pt=document.getElementById('progTxt');
-    pw.style.display='block'; pf.style.width='30%'; pt.textContent='กำลังบันทึก...';
-    try{
-      await dbSave(fid,selFile);
-      pf.style.width='100%'; pt.textContent='บันทึกสำเร็จ!';
-      const d=getC(subj);
-      if(!d.videos) d.videos = [];
-      d.videos.push({id:Date.now(),title,type:'file',fid,fname:selFile.name,fsize:selFile.size});
-      setC(subj,d);
-      document.getElementById('vTitle').value='';
-      clearFile();
-      setTimeout(()=>{pw.style.display='none';pf.style.width='0%'},1000);
-      renderVids(); updateCounts();
-      toast('✅ อัปโหลดไฟล์สำเร็จ');
-    }catch(e){
-      pw.style.display='none';
-      toast('เกิดข้อผิดพลาด: '+e.message,'err');
-    }
+    document.getElementById('vTitle').value=''; document.getElementById('vUrl').value='';
+    toast('✅ เพิ่มวิดีโอแล้ว');
   }
 }
-
-/* ══════════════ RENDER VIDEOS ══════════════ */
 function renderVids(){
-  const d=getC(subj);
-  const el=document.getElementById('vgrid');
-  if(!d.videos || !d.videos.length){
-    el.innerHTML=`<div class="empty"><div class="empty-ic">📹</div><div>ยังไม่มีวิดีโอในวิชานี้</div>${isAdmin?'<div style="font-size:.78rem;margin-top:5px;color:var(--a3);">เพิ่มวิดีโอได้ที่ Admin Panel ด้านบน</div>':''}</div>`;
-    return;
-  }
-  el.innerHTML=d.videos.map(v=>`
-    <div class="vcard" data-vid="${v.id}" onclick="playVid(${v.id})">
-      <div class="vthumb">
-        ${v.type==='yt'
-          ?`<img src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg" loading="lazy" onerror="this.style.display='none'">`
-          :`<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2.8rem">🎬</div>`
-        }
-        <div class="vplay"><div class="vplay-btn">▶</div></div>
-      </div>
+  const d=getC(subj); const el=document.getElementById('vgrid');
+  let vArr = d.videos ? Object.values(d.videos) : [];
+  if(!vArr.length){ el.innerHTML=`<div class="empty">ไม่มีเนื้อหาในหมวดนี้</div>`; return; }
+  el.innerHTML=vArr.map(v=>`
+    <div class="glass-panel vcard" data-vid="${v.id}" onclick="playVid(${v.id})">
+      <div class="vthumb"><img src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg"><div class="vplay"><div class="vplay-btn">▶</div></div></div>
       <div class="vinfo">
         <div class="vtitle">${escHtml(v.title)}</div>
-        <div class="vmeta">
-          ${v.type==='yt'?'<span class="vbadge yt">YouTube</span>':'<span class="vbadge file">Secure File</span>'}
-          ${isAdmin?`<button class="btn-del" data-del="${v.id}" onclick="event.stopPropagation();delVid(${v.id})">🗑 ลบ</button>`:''}
-        </div>
+        <div class="vmeta"><span class="vbadge yt">YouTube</span> ${isAdmin?`<button class="btn-del" onclick="event.stopPropagation();delVid(${v.id})">🗑 ลบ</button>`:''}</div>
       </div>
     </div>`).join('');
 }
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-async function playVid(vid){
-  const d=getC(subj);
-  const v=d.videos.find(x=>x.id===vid);
-  if(!v)return;
+function playVid(vid){
+  const d=getC(subj); let vArr = d.videos ? Object.values(d.videos) : [];
+  const v=vArr.find(x=>x.id===vid); if(!v)return;
   document.getElementById('vidLabel').textContent=v.title;
-  const content=document.getElementById('vidContent');
-  if(v.type==='yt'){
-    content.innerHTML=`<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${v.ytId}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>`;
-  } else {
-    try{
-      const file=await dbGet(v.fid);
-      if(!file){toast('ไม่พบไฟล์ — อาจต้องอัปโหลดใหม่จากคอมพิวเตอร์ต้นทาง','err');return}
-      const url=URL.createObjectURL(file);
-      content.innerHTML=`<video class="file-vid" controls autoplay src="${url}"></video>`;
-      content.querySelector('video').onended=()=>URL.revokeObjectURL(url);
-    }catch(e){toast('โหลดวิดีโอไม่ได้: '+e.message,'err');return}
-  }
+  document.getElementById('vidContent').innerHTML=`<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${v.ytId}?autoplay=1&rel=0" allow="autoplay;fullscreen" allowfullscreen></iframe></div>`;
   document.getElementById('vidOverlay').classList.add('open');
 }
 function closeVid(e,force){
   if(force||(e&&e.target===document.getElementById('vidOverlay'))){
     document.getElementById('vidOverlay').classList.remove('open');
-    const c=document.getElementById('vidContent');
-    const iframe=c.querySelector('iframe');
-    if(iframe)iframe.src=iframe.src;
-    const vid=c.querySelector('video');
-    if(vid){URL.revokeObjectURL(vid.src);vid.src=''}
-    c.innerHTML='';
+    document.getElementById('vidContent').innerHTML='';
   }
 }
-async function delVid(id){
+function delVid(id){
   const d=getC(subj);
-  const v=d.videos.find(x=>x.id===id);
-  if(v&&v.type==='file')await dbDel(v.fid);
-  d.videos=d.videos.filter(x=>x.id!==id);
-  setC(subj,d); renderVids(); updateCounts();
-  toast('ลบวิดีโอแล้ว');
+  if(d.videos) {
+    const key = Object.keys(d.videos).find(k => d.videos[k].id === id);
+    if(key) { delete d.videos[key]; setC(subj,d); toast('ลบแล้ว'); }
+  }
 }
 
-/* ══════════════ QUIZ BUILDER ══════════════ */
-function addQ(){
-  tempQs.push({qid:Date.now(),text:'',opts:['','','',''],correct:0});
-  renderQForm();
-}
-function removeQ(i){tempQs.splice(i,1);renderQForm()}
+/* ══════════════ QUIZ LOGIC ══════════════ */
+function addQ(){ tempQs.push({qid:Date.now(),text:'',opts:['','','',''],correct:0}); renderQForm(); }
+function removeQ(i){ tempQs.splice(i,1); renderQForm(); }
 function renderQForm(){
   document.getElementById('qContainer').innerHTML=tempQs.map((q,i)=>`
-    <div class="qrow">
-      <div class="qrow-hd">
-        <span>คำถามที่ ${i+1}</span>
-        <button class="btn-rm" onclick="removeQ(${i})">✕ ลบ</button>
-      </div>
-      <input placeholder="คำถาม..." value="${escHtml(q.text)}" oninput="tempQs[${i}].text=this.value"
-        style="width:100%;padding:8px 11px;border-radius:8px;font-family:'IBM Plex Sans Thai',sans-serif;font-size:.85rem;outline:none">
+    <div class="glass-panel qrow">
+      <div class="qrow-hd"><span>คำถามที่ ${i+1}</span><button class="btn-rm" onclick="removeQ(${i})">✕</button></div>
+      <input class="input-3d" placeholder="คำถาม..." value="${escHtml(q.text)}" oninput="tempQs[${i}].text=this.value">
       <div class="opts2">
         ${[0,1,2,3].map(j=>`
-          <div class="opt-row">
-            <input type="radio" name="c${i}" ${q.correct===j?'checked':''} onchange="tempQs[${i}].correct=${j}">
-            <input class="opt-input aform" placeholder="ตัวเลือก ${j+1}" value="${escHtml(q.opts[j])}" oninput="tempQs[${i}].opts[${j}]=this.value"
-              style="flex:1;padding:7px 10px;border-radius:7px;font-family:'IBM Plex Sans Thai',sans-serif;font-size:.83rem;outline:none">
-          </div>`).join('')}
+          <div class="opt-row"><input type="radio" name="c${i}" ${q.correct===j?'checked':''} onchange="tempQs[${i}].correct=${j}">
+          <input class="input-3d" style="padding:6px 10px;" placeholder="ช้อยส์ ${j+1}" value="${escHtml(q.opts[j])}" oninput="tempQs[${i}].opts[${j}]=this.value"></div>
+        `).join('')}
       </div>
-      <div style="font-size:.72rem;color:var(--em)">✓ คลิกวงกลมข้างตัวเลือกที่ถูกต้อง</div>
     </div>`).join('');
 }
 function saveQuiz(){
   const title=document.getElementById('qTitle').value.trim();
-  if(!title){toast('กรุณาตั้งชื่อแบบทดสอบ','err');return}
-  if(!tempQs.length){toast('กรุณาเพิ่มอย่างน้อย 1 คำถาม','err');return}
-  if(!tempQs.every(q=>q.text&&q.opts.every(o=>o))){toast('กรอกคำถามและตัวเลือกให้ครบ','err');return}
-  const d=getC(subj);
-  if(!d.quizzes) d.quizzes = [];
+  if(!title || !tempQs.length || !tempQs.every(q=>q.text&&q.opts.every(o=>o))) return toast('กรอกข้อมูลไม่ครบ','err');
+  const d=getC(subj); if(!d.quizzes) d.quizzes = [];
   d.quizzes.push({id:Date.now(),title,questions:JSON.parse(JSON.stringify(tempQs))});
-  setC(subj,d);
-  document.getElementById('qTitle').value='';
-  tempQs=[]; renderQForm(); renderQuizList(); updateCounts();
-  toast('✅ บันทึกแบบทดสอบแล้ว');
+  setC(subj,d); document.getElementById('qTitle').value=''; tempQs=[]; renderQForm(); toast('✅ สร้างชุดทดสอบแล้ว');
 }
-
-/* ══════════════ QUIZ LIST ══════════════ */
 function renderQuizList(){
-  const d=getC(subj);
-  const el=document.getElementById('qlistEl');
-  document.getElementById('quizPlay').style.display='none';
-  el.style.display='flex';
-  if(!d.quizzes || !d.quizzes.length){
-    el.innerHTML=`<div class="empty"><div class="empty-ic">📝</div><div>ยังไม่มีแบบทดสอบในวิชานี้</div></div>`;
-    return;
-  }
-  el.innerHTML=d.quizzes.map(q=>`
-    <div class="qitem">
-      <div>
-        <div class="qname">${escHtml(q.title)}</div>
-        <div class="qmeta">${q.questions.length} ข้อ
-          ${isAdmin?`<button class="btn-del" onclick="delQuiz(${q.id})" style="margin-left:10px">🗑 ลบ</button>`:''}
-        </div>
-      </div>
-      <button class="btn-start" onclick="startQuiz(${q.id})">เริ่มทำ →</button>
+  const d=getC(subj); const el=document.getElementById('qlistEl');
+  document.getElementById('quizPlay').style.display='none'; el.style.display='flex';
+  let qArr = d.quizzes ? Object.values(d.quizzes) : [];
+  if(!qArr.length){ el.innerHTML=`<div class="empty">ไม่มีชุดทดสอบ</div>`; return; }
+  el.innerHTML=qArr.map(q=>`
+    <div class="glass-panel qitem">
+      <div><div class="qname">${escHtml(q.title)}</div><div class="qmeta">${q.questions.length} ข้อ ${isAdmin?`<button class="btn-del" style="margin-left:10px" onclick="delQuiz(${q.id})">🗑 ลบ</button>`:''}</div></div>
+      <button class="gold-btn" style="padding:6px 15px;" onclick="startQuiz(${q.id})">เริ่มทำ</button>
     </div>`).join('');
 }
 function delQuiz(id){
   const d=getC(subj);
-  d.quizzes=d.quizzes.filter(q=>q.id!==id);
-  setC(subj,d); renderQuizList(); updateCounts();
-  toast('ลบแบบทดสอบแล้ว');
+  if(d.quizzes) {
+    const key = Object.keys(d.quizzes).find(k => d.quizzes[k].id === id);
+    if(key) { delete d.quizzes[key]; setC(subj,d); toast('ลบแล้ว'); }
+  }
 }
 
-/* ══════════════ QUIZ PLAY ══════════════ */
 function startQuiz(id){
-  const d=getC(subj);
-  curQuiz=d.quizzes.find(q=>q.id===id);
-  if(!curQuiz)return;
+  const d=getC(subj); let qArr = d.quizzes ? Object.values(d.quizzes) : [];
+  curQuiz=qArr.find(q=>q.id===id); if(!curQuiz)return;
   qIdx=0; qOk=0;
   document.getElementById('qPlayTitle').textContent=curQuiz.title;
   document.getElementById('qlistEl').style.display='none';
@@ -1037,55 +945,36 @@ function startQuiz(id){
   showQ();
 }
 function showQ(){
-  const q=curQuiz.questions[qIdx];
-  const tot=curQuiz.questions.length;
-  document.getElementById('qN').textContent=qIdx+1;
-  document.getElementById('qT').textContent=tot;
-  document.getElementById('qS').textContent=qOk;
-  document.getElementById('qProg').style.width=(qIdx/tot*100)+'%';
-  document.getElementById('qText').textContent=q.text;
-  document.getElementById('optsList').innerHTML=
-    q.opts.map((o,i)=>`<button class="obtn" onclick="answerQ(${i})">${['A','B','C','D'][i]}. ${escHtml(o)}</button>`).join('');
+  const q=curQuiz.questions[qIdx]; const tot=curQuiz.questions.length;
+  document.getElementById('qN').textContent=qIdx+1; document.getElementById('qT').textContent=tot; document.getElementById('qS').textContent=qOk;
+  document.getElementById('qProg').style.width=(qIdx/tot*100)+'%'; document.getElementById('qText').textContent=q.text;
+  document.getElementById('optsList').innerHTML=q.opts.map((o,i)=>`<button class="glass-panel obtn" style="text-align:left; border-color:var(--border);" onclick="answerQ(${i})">${['A','B','C','D'][i]}. ${escHtml(o)}</button>`).join('');
 }
-function answerQ(chosen){
-  const q=curQuiz.questions[qIdx];
-  const btns=document.querySelectorAll('.obtn');
-  btns.forEach(b=>b.disabled=true);
-  btns[q.correct].classList.add('correct');
-  if(chosen!==q.correct)btns[chosen].classList.add('wrong');
-  else qOk++;
+function answerQ(c){
+  const q=curQuiz.questions[qIdx]; const btns=document.querySelectorAll('.obtn'); btns.forEach(b=>b.disabled=true);
+  btns[q.correct].style.borderColor = 'var(--em)'; btns[q.correct].style.background = 'rgba(16,185,129,.2)';
+  if(c!==q.correct) { btns[c].style.borderColor = 'var(--red)'; btns[c].style.background = 'rgba(244,63,94,.2)'; } else qOk++;
   setTimeout(()=>{qIdx++;qIdx<curQuiz.questions.length?showQ():showResult()},900);
 }
 function showResult(){
-  document.getElementById('qQuestionView').style.display='none';
-  document.getElementById('qResult').style.display='block';
-  const tot=curQuiz.questions.length;
-  const pct=Math.round(qOk/tot*100);
+  document.getElementById('qQuestionView').style.display='none'; document.getElementById('qResult').style.display='block';
+  const tot=curQuiz.questions.length; const pct=Math.round(qOk/tot*100);
   document.getElementById('scoreNum').textContent=`${qOk}/${tot}`;
-  document.getElementById('scoreRing').style.setProperty('--p',pct+'%');
-  document.getElementById('scoreMsg').textContent=pct>=80?'🎉 ยอดเยี่ยมมาก!':pct>=60?'👍 ทำได้ดี!':pct>=40?'📚 ลองใหม่นะ!':'💪 ไม่ต้องท้อ!';
-  document.getElementById('scoreDetail').textContent=`ตอบถูก ${qOk} จาก ${tot} ข้อ (${pct}%)`;
+  document.getElementById('scoreRing').style.background = `conic-gradient(var(--a) ${pct}%, var(--surface) 0)`;
+  document.getElementById('scoreMsg').textContent=pct>=80?'🎉 ยอดเยี่ยม!':pct>=50?'👍 ผ่านเกณฑ์':'📚 ลองใหม่นะ';
 }
 function retryQuiz(){startQuiz(curQuiz.id)}
-function exitQuiz(){
-  document.getElementById('quizPlay').style.display='none';
-  document.getElementById('qlistEl').style.display='flex';
-  curQuiz=null;
-}
+function exitQuiz(){ document.getElementById('quizPlay').style.display='none'; document.getElementById('qlistEl').style.display='flex'; curQuiz=null; }
 
-/* ══════════════ TOAST ══════════════ */
-let _tt;
-function toast(msg,type='ok'){
-  const el=document.getElementById('toast');
-  el.textContent=msg;
-  el.className='show '+type;
-  clearTimeout(_tt);
-  _tt=setTimeout(()=>el.className='',3000);
+function toast(msg){
+  const el=document.getElementById('toast'); el.textContent=msg; el.className='show';
+  setTimeout(()=>el.className='',3000);
 }
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-/* ══════════════ INIT ══════════════ */
-initDB();
-checkAutoLogin(); // ตรวจสอบ Auto Login ทันทีเมื่อเปิดเว็บ
+/* ══════════════ INITIALIZE ══════════════ */
+applySettings();
+checkAutoLogin();
 </script>
 </body>
 </html>
